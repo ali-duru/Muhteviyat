@@ -1,13 +1,13 @@
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 const firebaseConfig = {
-  apiKey: "AIzaSyBoFLC28jlqDy0TZFovbxXrdQ0-MXjoUhA",
-  authDomain: "curd-testing-eb202.firebaseapp.com",
-  projectId: "curd-testing-eb202",
-  storageBucket: "curd-testing-eb202.appspot.com",
-  messagingSenderId: "691450371764",
-  appId: "1:691450371764:web:bbad529ad08acb5541c1e1",
+	apiKey: 'AIzaSyBJOeZXytkOesVvXM_YVYoTnKC4Aplvlug',
+	authDomain: 'muht-a99e6.firebaseapp.com',
+	projectId: 'muht-a99e6',
+	storageBucket: 'muht-a99e6.appspot.com',
+	messagingSenderId: '255922727858',
+	appId: '1:255922727858:web:7061209294b4b5214f52ab',
 };
 
 const app = initializeApp(firebaseConfig);
