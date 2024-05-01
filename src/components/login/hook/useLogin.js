@@ -1,60 +1,64 @@
-import { useRouter } from "next/navigation";
-import { useToastMessages } from "@/components/message/useToastMessages";
-import { loginSchema } from "../schema/loginSchema";
+import { useRouter } from 'next/navigation';
+import { useToastMessages } from '@/components/message/useToastMessages';
+import { loginSchema } from '../schema/loginSchema';
 
 import {
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
+	signInWithEmailAndPassword,
+	GoogleAuthProvider,
+	signInWithPopup,
+} from 'firebase/auth';
 
-import { auth } from "../../../../firebase/firebase";
+import { auth } from '../../../../firebase/firebase';
 
 const provider = new GoogleAuthProvider();
 
 export const useLogin = () => {
-  const router = useRouter();
+	const router = useRouter();
 
-  const { Success, Warn } = useToastMessages();
-  const initialValues = {
-    email: "",
-    password: "",
-  };
+	const { Success, Warn } = useToastMessages();
+	const initialValues = {
+		email: '',
+		password: '',
+	};
 
-  const handleNavigate = (url) => {
-    router.push(`/${url}`);
-  };
+	const handleNavigate = (url) => {
+		router.push(`/${url}`);
+	};
 
-  const handleGoogleSignUp = async () => {
-    try {
-      await signInWithPopup(auth, provider);
-      Success("Login DONE 😄");
-      handleNavigate("contact");
-    } catch (error) {
-      console.error("Error..", error);
-      Warn("Something Wrong :(");
-    }
-  };
+	const handleGoogleSignUp = async () => {
+		try {
+			await signInWithPopup(auth, provider);
+			Success('Giriş Yapıldı 😄');
+			handleNavigate('dashboard');
+		} catch (error) {
+			console.error('Error..', error);
+			Warn('Something Wrong :(');
+		}
+	};
 
-  const handleSubmit = async (values, { resetForm }) => {
-    const { email, password } = values;
+	const handleSubmit = async (values, { resetForm }) => {
+		const { email, password } = values;
 
-    try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
+		try {
+			const user = await signInWithEmailAndPassword(
+				auth,
+				email,
+				password
+			);
 
-      Success("Login DONE 😄");
-      handleNavigate("contact");
-      resetForm();
-    } catch (error) {
-      Warn("Something Wrong  😑!");
-    }
-  };
+			Success('Giriş Yapıldı 😄');
+			handleNavigate('dashboard');
+			resetForm();
+		} catch (error) {
+			Warn('Something Wrong  😑!');
+		}
+	};
 
-  return {
-    initialValues,
-    schema: loginSchema,
-    handleNavigate,
-    handleSubmit,
-    googleSignIn: handleGoogleSignUp,
-  };
+	return {
+		initialValues,
+		schema: loginSchema,
+		handleNavigate,
+		handleSubmit,
+		googleSignIn: handleGoogleSignUp,
+	};
 };

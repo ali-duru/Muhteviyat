@@ -1,73 +1,73 @@
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import {
-  createUserWithEmailAndPassword,
-  updateProfile,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
+	createUserWithEmailAndPassword,
+	updateProfile,
+	GoogleAuthProvider,
+	signInWithPopup,
+} from 'firebase/auth';
 
-import { useToastMessages } from "@/components/message/useToastMessages";
-import { registerSchema } from "../schema/registerSchema";
+import { useToastMessages } from '@/components/message/useToastMessages';
+import { registerSchema } from '../schema/registerSchema';
 
-import { auth } from "../../../../firebase/firebase";
-import { useAuth } from "../../../../firebase/auth";
+import { auth } from '../../../../firebase/firebase';
+import { useAuth } from '../../../../firebase/auth';
 
 const provider = new GoogleAuthProvider();
 
 export const useRegister = () => {
-  const router = useRouter();
+	const router = useRouter();
 
-  const { Success, Warn } = useToastMessages();
-  const { setAuthUser } = useAuth();
-  const initialValues = {
-    name: "",
-    email: "",
-    password: "",
-  };
+	const { Success, Warn } = useToastMessages();
+	const { setAuthUser } = useAuth();
+	const initialValues = {
+		name: '',
+		email: '',
+		password: '',
+	};
 
-  const handleNavigate = (url) => {
-    router.push(`/${url}`);
-  };
+	const handleNavigate = (url) => {
+		router.push(`/${url}`);
+	};
 
-  const handleGoogleSignUp = async () => {
-    try {
-      await signInWithPopup(auth, provider);
-      Success("LoggedIn 😄");
-      handleNavigate("contact");
-    } catch (error) {
-      console.error("Error..", error);
-      Warn("Something Wrong :(");
-    }
-  };
+	const handleGoogleSignUp = async () => {
+		try {
+			await signInWithPopup(auth, provider);
+			Success('Giriş Yapıldı 😄');
+			handleNavigate('dashboard');
+		} catch (error) {
+			console.error('Error..', error);
+			Warn('Something Wrong :(');
+		}
+	};
 
-  const handleSubmit = async (values, { resetForm }) => {
-    const { name, email, password } = values;
+	const handleSubmit = async (values, { resetForm }) => {
+		const { name, email, password } = values;
 
-    try {
-      const { user } = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      await updateProfile(auth.currentUser, { displayName: name });
-      setAuthUser({
-        uid: user.uid,
-        email: user.email,
-        name: user.displayName,
-      });
-      Success("Registration DONE 😄");
-      handleNavigate("contact");
-      resetForm();
-    } catch (error) {
-      Warn("Something Wrong  😑!");
-    }
-  };
+		try {
+			const { user } = await createUserWithEmailAndPassword(
+				auth,
+				email,
+				password
+			);
+			await updateProfile(auth.currentUser, { displayName: name });
+			setAuthUser({
+				uid: user.uid,
+				email: user.email,
+				name: user.displayName,
+			});
+			Success('Üye olma işlemi gerçekleşti. 😄');
+			handleNavigate('dashboard');
+			resetForm();
+		} catch (error) {
+			Warn('Birşey yanlış gitti  😑!');
+		}
+	};
 
-  return {
-    initialValues,
-    schema: registerSchema,
-    handleSubmit,
-    navigate: handleNavigate,
-    googleSignUp: handleGoogleSignUp,
-  };
+	return {
+		initialValues,
+		schema: registerSchema,
+		handleSubmit,
+		navigate: handleNavigate,
+		googleSignUp: handleGoogleSignUp,
+	};
 };
